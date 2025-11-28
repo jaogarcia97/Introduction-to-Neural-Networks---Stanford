@@ -54,9 +54,11 @@ Answer: Only the value that has affected "or won" ove got passed down the rest o
 
 ### Introduction
 
-Every node contains a single "formula" that requires an input. This formula is what you call a **Node Operation**. You get this "formula" for each node by breaking down the formula of choice into smaller pieces
+In order to create a neural network, you have select a formula of choice. Usually you call this your neural network architecture or hypthesis.
 
-For example, if your formula of choice is (x+y)z. This means that you are creating a neural network under this (x+y)z architecture. 
+Each node would then be solved by breaking down your "main formula" into smaller pieces called "node operations"
+
+For example - If your formula of choice is (x+y)z. This means that you are creating a neural network under this (x+y)z architecture. 
 
 This would then be broken down into nodes that would compose of the basic operations as if there are steps
 
@@ -89,18 +91,57 @@ We use the formulas for these node operations in order to determine how much cha
 
 * Reflection: This is why the Add Gate is called a Gradient Distributor since it just copies whatever the Upstream Gradient is and passes it (or "distributes it") back to the nodes it came from
 
+#### 2. The Max Gate
+**Node Operation:** `max(x, y)`
 
-#### 2. The Multiplication Node ($*$)
-* **Function:** $f(x, y) = x \cdot y$
-* **How to read it:** "Multiply the top wire ($x$) and the bottom wire ($y$)."
-* **Derivative Rule (Gradient Switcher):**
-    * The derivative of $x$ becomes $y$.
-    * The derivative of $y$ becomes $x$.
-    * *Intuition:* You multiply the upstream gradient by the value of the *other* input wire.
+| Condition | Value |
+|---:|:---|
+| `x ≥ y` | `x` |
+| `y > x` | `y` |
 
-#### 3. The Max Node (max)
-* **Function:** $f(x, y) = \max(x, y)$
-* **How to read it:** "Output whichever number is bigger."
-* **Derivative Rule (Gradient Router):**
-    * **For the Winner:** Gradient is **1** (it passes the upstream gradient through).
-    * **For the Loser:** Gradient is **0** (it blocks the gradient).
+* **Local Gradient Computation**: 
+    - If x is max
+        - Node Operation = x
+        - $df/dx = 1$
+        - $df/dy = 0$
+    - If y ix max
+        - Node Operation = y
+        - $df/dx = 0$
+        - $df/dy = 1$
+
+* **Global Gradient Computation**: 
+    - Global Gradient = Local Gradient * Upstream Gradient 
+    - If x is max
+        - Global Gradient for x 
+            - $ [df/dx] × UpstreamGradient = 1$ 
+        - Global Gradient for y
+            - $ [df/dy] × UpstreamGradient = 0$ 
+    - If y is max
+        - Global Gradient for x 
+            - $ [df/dx] × UpstreamGradient = 0$ 
+        - Global Gradient for y
+            - $ [df/dy] × UpstreamGradient = 1$ 
+
+* Reflection:
+    - Think of the Max Gate as a traffic director. Because only the largest input "won" and determined the output, the gate "routes" the entire gradient back to that winner. The other inputs (the losers) didn't affect the result, so the gate blocks the flow to them completely by multiplying their gradient by 0.
+
+#### 3. The Multiplication Gate
+**Node Operation:** `f(x, y) = x * y`
+
+* **Local Gradient Computation**: 
+    - Gradient with respect to x
+        - Treat `y` as a constant (coefficient)
+        - $df/dx = y$
+    - Gradient with respect to y
+        - Treat `x` as a constant (coefficient)
+        - $df/dy = x$
+
+* **Global Gradient Computation**: 
+    - Global Gradient = Local Gradient * Upstream Gradient 
+    - Global Gradient for x 
+        - $ [df/dx] \times \text{UpstreamGradient} = y \times \text{UpstreamGradient}$ 
+    - Global Gradient for y
+        - $ [df/dy] \times \text{UpstreamGradient} = x \times \text{UpstreamGradient}$ 
+
+* **Reflection**:
+    - This is called a **Gradient Switcher** because the local gradient for one input is literally the value of the *other* input. When the gradient flows back to $x$, it gets scaled by $y$. When it flows back to $y$, it gets scaled by $x$. The gate effectively "switches" the values to determine the strength of the gradient for the opposite wire.
