@@ -49,7 +49,9 @@ Such a beauty.
 Question: How does the max node work?
 Answer: Only the value that has affected "or won" ove got passed down the rest of the computational graph, since it is the only one that affected change, it only makes sense when we're passing our gradients back we just want to adjust who "won" (hence the max)
 
-
+??:??
+Question: Why would it be linear when you use 1 layer only?
+Answer: Technically, two layers won't necessarily make it linear. since wx is the first layer, recall it has a form similar to y = mx + b (equation of a line), if you add a second layer that multiplies wx to w_2(max x,0), the max x makes it non linenar
 
 
 ### Introduction
@@ -145,3 +147,45 @@ We use the formulas for these node operations in order to determine how much cha
 
 * **Reflection**:
     - This is called a **Gradient Switcher** because the local gradient for one input is literally the value of the *other* input. When the gradient flows back to $x$, it gets scaled by $y$. When it flows back to $y$, it gets scaled by $x$. The gate effectively "switches" the values to determine the strength of the gradient for the opposite wire.
+
+
+## Gradient Accumulation
+If one node is connected to multiple nodes, the gradients add up at this node
+
+![alt text](image-2.png)
+
+
+## Convolutional Neural Networks
+
+1:05:25
+Question: When do you know you've done enough classifiction
+Her Answer: You just try and see, tweak your design choices and see what works best for your product
+
+## Lecture 3: Loss Function and Optimization
+
+54:25
+#### Question: 
+ (54:25) What is the gradient again?
+
+#### Answer:
+
+The **gradient** of a function is a **vector** that combines all of its partial derivatives.  
+It is denoted by the upside-down triangle symbol **∇** (called *del*).
+
+#### Key Points
+
+- The gradient is a **vector of partial derivatives**.  
+  
+  The gradient of a function \( f(x, y) \) is: 
+
+  $\nabla f = \left[ \frac{\partial f}{\partial x},\ \frac{\partial f}{\partial y} \right]$
+
+- It **points in the direction of the maximum rate of change** of the function.
+
+- The **magnitude of the gradient** equals the **maximum rate of change** itself.
+
+###  Example
+
+For a function \( f(x, y, z) \), its gradient is the vector:
+
+$\nabla f = \left[ \frac{\partial f}{\partial x},\ \frac{\partial f}{\partial y},\ \frac{\partial f}{\partial z} \right]$
