@@ -1,6 +1,13 @@
 # Introduction-to-Neural-Networks---Stanford
 These are the notes for Serena Young's Lecture : https://www.youtube.com/watch?v=d14TUNcbn1k
 
+Handouts:
+https://cs231n.stanford.edu/slides/2025/
+
+Latest video: (2025) - but teaching of  https://www.youtube.com/watch?v=2fq9wYslV0A&list=PLoROMvodv4rOmsNzYBMe0gJY2XS8AQg16&index=1
+
+
+
 9:31 
 Question: What does find the effect of y on f mean?
 Answer: That is just translated to df/dy
@@ -155,7 +162,7 @@ If one node is connected to multiple nodes, the gradients add up at this node
 ![alt text](image-2.png)
 
 
-## Convolutional Neural Networks
+## Lecture 4: Convolutional Neural Networks
 
 1:05:25
 Question: When do you know you've done enough classifiction
@@ -163,13 +170,14 @@ Her Answer: You just try and see, tweak your design choices and see what works b
 
 ## Lecture 3: Loss Function and Optimization
 
-54:25
-#### Question: 
- (54:25) What is the gradient again?
+
+### Question: 
+ (54:25) What is the gradient again? I don't understand any of this 
+![alt text](image-4.png)
 
 #### Answer:
 
-The **gradient** of a function is a **vector** that combines all of its partial derivatives.  
+Let's recall, the **gradient** of a function is a **vector** that combines all of its partial derivatives.  
 It is denoted by the upside-down triangle symbol **∇** (called *del*).
 
 #### Key Points
@@ -184,8 +192,55 @@ It is denoted by the upside-down triangle symbol **∇** (called *del*).
 
 - The **magnitude of the gradient** equals the **maximum rate of change** itself.
 
-###  Example
+####  Example
 
 For a function \( f(x, y, z) \), its gradient is the vector:
 
 $\nabla f = \left[ \frac{\partial f}{\partial x},\ \frac{\partial f}{\partial y},\ \frac{\partial f}{\partial z} \right]$
+
+### Follow Up question:
+How does that relate to slope? Why do they want us to follow the slope?
+
+#### Answer
+
+It fundamentally changes how we calculate change.
+Recall that the basic definition of slope is sensitivity: How much does the output change relative to a change in input?
+
+$$\text{Slope} \approx \frac{\text{Change in Output}}{\text{Change in Input}}$$
+
+The number of input dimensions determines how many "directions" of slope exist.
+
+1. One Dimension (1 Input): The Single Slope
+In a 1D function like $f(x)$, you only have one input variable. You can only move forward or backward along that line.
+
+    - Because there is only one direction of travel, **there is only one slope at any given point.**
+    - We calculate this using the ordinary derivative $\frac{dy}{dx}$ (Rise over Run).
+
+2. Two Dimensions (2 Inputs): Infinite Slopes In a multivariable function like $f(x, y)$, you are standing on a surface (like a hill).
+    - Because you have 2 input dimensions ($x$ and $y$), you can move in many directions (North, East, South-West, etc.).
+    - Therefore, a single number (like "3") is no longer enough to describe the slope, because the slope depends on which direction you walk.
+
+
+3. The Solution: Partial Derivatives & The GradientTo handle this, we measure the slope in the direction of each axis separately:
+    - Partial Derivative w.r.t $x$: Slope if you only move along the x-axis.
+    - Partial Derivative w.r.t $y$: Slope if you only move along the y-axis.When we package these separate slopes together, we get a vector called the Gradient ($\nabla f$). The gradient doesn't just tell you how steep the hill is; it tells you the direction of the steepest ascent.
+
+You can use this as a visual reference if you have troubles in understanding gradients:
+- https://www.youtube.com/watch?v=GkB4vW16QHI : Quick
+
+Why the dot product then?
+- https://www.youtube.com/watch?v=snIdXOjUG44 : Gradients Review in Multivariable Calculus
+
+#### Why negative gradient?
+- Because a gradient is the max increase in change, a negative gradient is the max decrease in change. Since in neural networks, gradients are used to signify loss (error), we want the least loss (hence the negative gradient)
+
+- https://www.youtube.com/watch?v=IHZwWFHWa-w : Extensive by 3Blue1Brown
+
+
+Gradient Descent Visualization:
+- http://vision.stanford.edu/teaching/cs231n-demos/linear-classify/
+
+
+
+**Dimensions** of a function is determined by how many **independent inputs** it takes not the axes. - That's why it's called multi variable (inputs) calculus
+
